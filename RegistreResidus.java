@@ -170,6 +170,29 @@ public class RegistreResidus {
     }
 
     /**
+     * Mostra les dades del registre de residus d'un municipi.
+     *
+     * @return cadena de text amb les dades del registre.
+     */
+    @Override
+    public String toString() {
+        String text = "Any: " + any +
+                ", Municipi: " + municipi +
+                ", Comarca: " + comarca +
+                ", Població: " + poblacio +
+                "\nMatèria orgànica: " + materiaOrganica +
+                ", Poda i jardineria: " + podaJardineria +
+                ", Paper i cartró: " + paperCarto +
+                ", Vidre: " + vidre +
+                ", Envasos lleugers: " + envasosLleugers +
+                "\nTotal recollida selectiva: " + totalRecollidaSelect +
+                ", Fracció resta: " + sumaFraccioResta +
+                ", Generació total residus: " + generResidusMunicipalsTotals;
+
+        return text;
+    }
+    
+    /**
      * Compara el registre actual amb un altre objecte.
      * Dos registres són iguals si tenen el mateix municipi
      * i el mateix any.

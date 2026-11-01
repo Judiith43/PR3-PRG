@@ -2,9 +2,136 @@ public class LlistaRegistreResidus {
     private RegistreResidus[] llista;
     private int nElem;
 
+
+    /**
+     * Constructor que crea una llista de registres de residus
+     * amb una capacitat màxima determinada.
+     * Inicialment la llista està buida.
+     *
+     * @param capacitat nombre màxim de registres que pot contenir la llista.
+     */
     public LlistaRegistreResidus (int capacitat) {
         llista = new RegistreResidus[capacitat];
         nElem = 0; 
+    }
+
+     /**
+     * Consulta el nombre de registres emmagatzemats a la llista.
+     *
+     * @return nombre actual de registres de la llista.
+     */
+    public int getNElem() {
+        return nElem;
+    }
+/**
+     * Consulta el registre que es troba en una posició determinada.
+     * Si la posició és vàlida, retorna una còpia del registre.
+     *
+     * @param pos posició del registre que es vol consultar.
+     * @return una còpia del registre de la posició indicada,
+     *         o null si la posició no és vàlida.
+     */
+    public RegistreResidus getRegistre(int pos) {
+        RegistreResidus aux = null;
+
+        if (pos >= 0 && pos < nElem) {
+            aux = llista[pos].copia();
+        }
+
+        return aux;
+    }
+
+    /**
+     * Comprova si la llista de registres està plena.
+     *
+     * @return true si la llista està plena, false en cas contrari.
+     */
+    public boolean esPlena() {
+        return nElem == llista.length;
+    }
+
+    /**
+     * Crea una còpia de la llista de registres de residus.
+     *
+     * @return una nova llista amb les mateixes dades.
+     */
+    public LlistaRegistreResidus copia() {
+        LlistaRegistreResidus aux = new LlistaRegistreResidus(llista.length);
+        for (int i = 0; i < nElem; i++) {
+            aux.llista[i] = llista[i].copia();
+        }
+        aux.nElem = nElem;
+        return aux;
+    }
+
+   /**
+     * Mostra les dades de tots els registres de la llista.
+     *
+     * @return cadena de text amb els registres de residus.
+     */
+    @Override
+    public String toString() {
+        String text = "Llista de residus amb " + nElem + " registres.";
+
+        for (int i = 0; i < nElem; i++) {
+            text = text + "\n\t" + llista[i];
+        }
+
+        return text;
+    }
+
+    /**
+     * Afegeix un nou registre de residus a la llista si hi ha espai disponible.
+     *
+     * @param nou registre de residus que es vol afegir.
+     */
+    public void afegir(RegistreResidus nou) {
+        if (nElem < llista.length) {
+            llista[nElem] = nou.copia();
+            nElem++;
+        }
+    }
+    
+    /**
+     * Consulta el registre del municipi amb més quilos de matèria
+     * orgànica recollits per habitant en un any determinat.
+     *
+     * @param any any del qual es vol consultar el registre.
+     * @return el registre trobat o null si no n'hi ha cap.
+     */
+    public RegistreResidus mesKgFracOrganicaAny(int any) {
+        RegistreResidus aux = null;
+        double max = 0;
+        double kgPerHab = 0;
+        
+        for (int i = 0; i <nElem; i++) {
+            if(llista[i].getAny() == any && llista[i].getPoblacio() > 0) {
+                kgPerHab = llista[i].getMateriaOrganica()*1000/llista[i].getPoblacio();     
+            
+                if(aux == null || kgPerHab > max) {
+                    max = kgPerHab;
+                    aux = llista[i];
+                }
+            }
+        }
+        return aux;
+    }
+
+    /**
+     * Consulta tots els registres de residus d'un municipi.
+     *
+     * @param municipi nom del municipi que es vol consultar.
+     * @return una nova llista amb els registres del municipi.
+     */
+    public LlistaRegistreResidus registresMunicipis(String municipi) {
+        LlistaRegistreResidus aux = new LlistaRegistreResidus(nElem);
+        for(int i = 0; i < nElem; i++) {
+            if(llista[i].getMunicipi().equalsIgnoreCase(municipi)) {
+                aux.llista[aux.nElem] = llista[i].copia();
+                aux.nElem++;                                         
+            }
+        }
+        return aux;
     }
 
     /**
@@ -52,6 +179,26 @@ public class LlistaRegistreResidus {
             resultat[i] = noms[i];
         }
         return resultat;
+    }
+
+    /**
+     * Consulta el primer registre d'un municipi que no ha reciclat
+     * envasos lleugers en alguna anualitat.
+     *
+     * @return el primer registre trobat o null si no n'hi ha cap.
+     */
+    public RegistreResidus municipiNoReciclatEnvasos() {
+        RegistreResidus aux = null;
+        int i = 0;
+        while(i < nElem && aux == null) {
+            if(llista[i].getEnvasosLleugers() == 0) {
+                aux = llista[i];
+            }
+            else { 
+                i++;
+            }
+        }
+        return aux;
     }
 
     /**
@@ -110,4 +257,20 @@ public class LlistaRegistreResidus {
         return 0;
     }
     
+    /**
+     * Elimina tots els registres d'un municipi de la llista.
+     *
+     * @param municipi nom del municipi del qual s'eliminen els registres.
+     */
+    public void esborrarDadesMunicipi(String municipi) {
+        for (int i = 0; i < nElem; i++) {
+            if (llista[i].getMunicipi().equalsIgnoreCase(municipi)) {
+                for (int j = i; j < nElem - 1; j++) {
+                    llista[j] = llista[j + 1];
+                }
+                nElem--;
+                i--;
+            }
+        }
+    }
 }
