@@ -30,9 +30,10 @@ public class RegistreResidus {
      * @param envLleug quantitat d'envasos lleugers en tones.
      * @param totalRec total de recollida selectiva en tones.
      * @param sumaFrac quantitat de la fracció resta en tones.
+     * @param totalResidus generació total de residus municipals en tones.
      */
     public RegistreResidus(int any, String muni, String com, int pob, double matOrg, double podaJar, double paperCarto, double vidre, double envLleug, 
-                            double totalRec, double sumaFrac) {
+                            double totalRec, double sumaFrac, double totalResidus) {
         this.any = any;
         municipi = muni;
         comarca = com;
@@ -44,7 +45,7 @@ public class RegistreResidus {
         envasosLleugers = envLleug;
         totalRecollidaSelect = totalRec;
         sumaFraccioResta = sumaFrac;
-        generResidusMunicipalsTotals = sumaFraccioResta + totalRecollidaSelect;    
+        generResidusMunicipalsTotals = totalResidus;    
     }
 
      /**
@@ -166,7 +167,7 @@ public class RegistreResidus {
      */
     public RegistreResidus copia() {
         return new RegistreResidus(this.any, this.municipi, this.comarca, this.poblacio, this.materiaOrganica, this.podaJardineria, this.paperCarto, 
-                                    this.vidre, this.envasosLleugers, this.totalRecollidaSelect, this.sumaFraccioResta);
+                                    this.vidre, this.envasosLleugers, this.totalRecollidaSelect, this.sumaFraccioResta, this.generResidusMunicipalsTotals);
     }
 
     /**
